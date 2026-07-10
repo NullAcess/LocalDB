@@ -1,5 +1,5 @@
-﻿using LocalDB.DBlogic.Operationes;
-using LocalDB.Displays;
+﻿using LocalDB.Displays;
+using LocalDB.DataBases;
 
 namespace LocalDB.Programs;
 
@@ -8,21 +8,18 @@ internal class Program
     static void Main()
     {
         bool isContinue = true;
-        List<string> dataBase = new List<string>();
 
         // ========== READING / WRITING THE LOCAL DB ==========
-        string filePath = @"C:\Program Files\localDB.txt";
 
         while (isContinue)
         {
-            Display.MainMenu();
-            if (!File.Exists(filePath)) File.Create(filePath).Close();
+            if (!File.Exists(DataBase.filePath)) File.Create(DataBase.filePath).Close();
 
-            dataBase = File.ReadAllLines(filePath).ToList();
-            Operations.AddAnElement(dataBase, filePath);
+            DataBase.dataBase = File.ReadAllLines(DataBase.filePath).ToList();
 
-            for (int i = 0; i < dataBase.Count; i++) Console.Write($"{dataBase[i]} ");
+            for (int i = 0; i < DataBase.dataBase.Count; i++) Console.Write($"{DataBase.dataBase[i]} ");
 
+            Display.MainMenuDisplay();
             isContinue = false;
         }
 
