@@ -1,4 +1,5 @@
-﻿using LocalDB.Displays;
+﻿using LocalDB.DataBases;
+using LocalDB.Displays;
 
 namespace LocalDB.Operationes;
 
@@ -10,21 +11,18 @@ internal class Operations
         return true;
     }
 
-    public static void ListElement(List<string> dataBase)
+    public static bool ListElement(List<string> dataBase)
     {
-        if (dataBase.Count <= 0)
-        {
-            Console.WriteLine("==== LOCAL DATA BASE IS EMPTY ===="); // ! ПРОВЕРИТЬ РАБОТУ ПРИ ПУСТОМ СПИСКЕ ДАННЫХ В БД
-            return;
-        }
+        if (dataBase.Count <= 0) return true;
 
         for (int i = 0; i < dataBase.Count; i++)
         {
             Console.WriteLine($"{i}.  {dataBase[i]}");
         }
+        return false;
     }
 
-    public static void AddElement(List<string> dataBase,string filePath, string element)
+    public static void AddElement(List<string> dataBase, string filePath, string element)
     {
         dataBase.Add(element);
         File.WriteAllLines(filePath, dataBase);
@@ -36,9 +34,34 @@ internal class Operations
         File.WriteAllLines(filePath, dataBase);
     }
 
+    public static void ChangeElement(List<string> dataBase, string filePath, int index, string userEnter)
+    {
+        dataBase[index] = userEnter;
+        File.WriteAllLines(filePath, dataBase);
+    }
+
     public static bool ExitCheck(string userEnter)
     {
         if (userEnter == "/exit") return true;
         return false;
     }
-} 
+
+    public static bool ReadString(string userEnter)
+    {
+        if (ExitCheck(userEnter)) return false;
+        else return true;
+    }
+
+    public static bool ReadIndex(string userEnter, out int userIndex)
+    {
+        userIndex = -1;
+        if (ExitCheck(userEnter)) return false;
+
+        if (!NumberCheck(userEnter, out userIndex))
+        {
+            if (Display.Error()) return false;
+        }
+        else return true;
+        return false;
+    }
+}

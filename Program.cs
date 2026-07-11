@@ -1,5 +1,5 @@
-﻿using LocalDB.Displays;
-using LocalDB.DataBases;
+﻿using LocalDB.DataBases;
+using LocalDB.Displays;
 
 namespace LocalDB.Programs;
 
@@ -9,7 +9,7 @@ internal class Program
     {
         bool isContinue = true;
 
-        // ========== READING / WRITING THE LOCAL DB ==========
+        // ========== READING THE LOCAL DB ==========
 
         while (isContinue)
         {
@@ -20,7 +20,7 @@ internal class Program
             Display.MainMenuDisplay();
             isContinue = false;
         }
-            
+
         Console.ReadKey();
     }
 }

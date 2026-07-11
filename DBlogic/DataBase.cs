@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace LocalDB.DataBases;
+﻿namespace LocalDB.DataBases;
 
 internal class DataBase
 {

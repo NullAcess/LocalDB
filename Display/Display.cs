@@ -16,23 +16,26 @@ internal static class Display
         const string listElement = "List of elements";
         const string addElement = "Add Element";
         const string removeElement = "Remove Element";
+        const string changeElement = "Change Element";
         const string exit = "Exit";
 
         while (isContinue)
         {
             Console.Clear();
             Console.WriteLine("==== CHOOSE OPTION ====");
-;
+            Console.WriteLine("'/exit' to exit from category\n");
+
             var choice = AnsiConsole
                 .Prompt(new SelectionPrompt<string>() // собираем список
                 .HighlightStyle(new Style(foreground: Color.Red)) // цвет выбранного пункта списка
-                .AddChoices($"{listElement}", $"{addElement}", $"{removeElement}", $"{exit}")); // варианты списака
+                .AddChoices($"{listElement}", $"{addElement}", $"{removeElement}", $"{changeElement}", $"{exit}")); // варианты списака
 
             switch (choice)
             {
                 case $"{listElement}": ListElementDisplay(); break;
-                case $"{addElement}": AddElementDisplay(); ;break;
-                case $"{removeElement}": RemoveElementDisplay(); ;break;
+                case $"{addElement}": AddElementDisplay(); ; break;
+                case $"{removeElement}": RemoveElementDisplay(); ; break;
+                case $"{changeElement}": ; break;
                 case $"{exit}": Environment.Exit(0); break;
             }
         }
@@ -45,12 +48,12 @@ internal static class Display
         while (true)
         {
             Console.Clear();
-            Console.Write("('/exit') Enter an element: ");
+            Console.Write("Enter an element: ");
             userEnter = Console.ReadLine() ?? String.Empty;
 
-            if (Operations.ExitCheck(userEnter)) return;
+            if (!Operations.ReadString(userEnter)) return;
 
-            Operations.AddElement(dataBase: DataBase.dataBase, filePath: DataBase.filePath, element: Console.ReadLine() ?? String.Empty);
+            Operations.AddElement(dataBase: DataBase.dataBase, filePath: DataBase.filePath, element: userEnter);
         }
     }
 
@@ -63,19 +66,18 @@ internal static class Display
         {
             Console.Clear();
             Operations.ListElement(dataBase: DataBase.dataBase);
-            Console.Write("('/exit') Enter an index to remove:  ");
+            Console.Write("Enter an index to remove:  ");
             userEnter = Console.ReadLine() ?? String.Empty;
 
-            if(!Operations.ExitCheck(userEnter))
-            {
-                if (!Operations.NumberCheck(userEnter, out userIndex))
-                {
-                    if (Error()) continue;
-                }
-            }
+            if (!Operations.ReadIndex(userEnter, out userIndex)) continue;
 
             Operations.RemoveElement(dataBase: DataBase.dataBase, filePath: DataBase.filePath, index: userIndex);
         }
+    }
+
+    private static void ChangeElementDisplay()
+    {
+
     }
 
     private static void ListElementDisplay()
@@ -85,14 +87,18 @@ internal static class Display
         while (true)
         {
             Console.Clear();
-            Operations.ListElement(dataBase: DataBase.dataBase);
+
+            if(DataBase.dataBase.Count <= 0) Console.WriteLine("==== EMPTY LIST ====");
+            else Operations.ListElement(dataBase: DataBase.dataBase);
+
+            Console.Write("Enter: ");
             userEnter = Console.ReadLine() ?? String.Empty;
 
-            if (Operations.ExitCheck(userEnter)) return;
+            if (!Operations.ReadString(userEnter)) return;
         }
     }
 
-    private static bool Error()
+    public static bool Error()
     {
         Console.Clear();
         Console.WriteLine("Error");
