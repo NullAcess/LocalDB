@@ -32,7 +32,7 @@ internal static class Display
             {
                 case $"{listElement}": ListElementDisplay(); break;
                 case $"{addElement}": AddElementDisplay(); ;break;
-                case $"{removeElement}": Console.WriteLine("REMOVE"); ;break;
+                case $"{removeElement}": RemoveElementDisplay(); ;break;
                 case $"{exit}": Environment.Exit(0); break;
             }
         }
@@ -42,14 +42,54 @@ internal static class Display
     {
         Console.Clear();
         Console.Write("Enter an element: ");
+
+        if (PressToExit()) return;
+
         Operations.AddElement(dataBase: DataBase.dataBase, filePath: DataBase.filePath, element: Console.ReadLine() ?? String.Empty);
-        Console.ReadLine();
+    }
+
+    private static void RemoveElementDisplay()
+    {
+        int userIndex = 0;
+        bool isContinue = true;
+
+        while (isContinue)
+        {
+            Console.Clear();
+            Operations.ListElement(dataBase: DataBase.dataBase);
+            Console.Write("Enter an index to remove by index: ");
+
+            if (PressToExit()) return;
+
+            if (!Operations.NumberCheck(Console.ReadLine() ?? String.Empty, out userIndex))
+            {
+                if (Error() == true) continue;
+            }
+
+            Operations.RemoveElement(dataBase: DataBase.dataBase, filePath: DataBase.filePath, index: userIndex);
+        }
     }
 
     private static void ListElementDisplay()
     {
         Console.Clear();
         Operations.ListElement(dataBase: DataBase.dataBase);
-        Console.ReadLine();
+
+        if (PressToExit()) return;
+    }
+
+    private static bool Error()
+    {
+        Console.Clear();
+        Console.WriteLine("Error");
+        Thread.Sleep(1000);
+        return true;
+    }
+
+    private static bool PressToExit()
+    {
+        ConsoleKeyInfo key = Console.ReadKey();
+        if (key.Key == ConsoleKey.Escape) return true;
+        return false;
     }
 }

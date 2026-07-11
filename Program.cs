@@ -17,12 +17,10 @@ internal class Program
 
             DataBase.dataBase = File.ReadAllLines(DataBase.filePath).ToList();
 
-            for (int i = 0; i < DataBase.dataBase.Count; i++) Console.Write($"{DataBase.dataBase[i]} ");
-
             Display.MainMenuDisplay();
             isContinue = false;
         }
-
+            
         Console.ReadKey();
     }
 }
