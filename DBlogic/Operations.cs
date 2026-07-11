@@ -14,7 +14,7 @@ internal class Operations
     {
         if (dataBase.Count <= 0)
         {
-            Console.WriteLine("==== LOCAL DATA BASE IS EMPTY ====");
+            Console.WriteLine("==== LOCAL DATA BASE IS EMPTY ===="); // ! ПРОВЕРИТЬ РАБОТУ ПРИ ПУСТОМ СПИСКЕ ДАННЫХ В БД
             return;
         }
 
@@ -34,5 +34,11 @@ internal class Operations
     {
         dataBase.RemoveAt(index);
         File.WriteAllLines(filePath, dataBase);
+    }
+
+    public static bool ExitCheck(string userEnter)
+    {
+        if (userEnter == "/exit") return true;
+        return false;
     }
 } 

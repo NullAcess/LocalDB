@@ -1,7 +1,7 @@
 ﻿using LocalDB.DataBases;
 using LocalDB.Operationes;
-using LocalDB.Programs;
 using Spectre.Console;
+using System.Reflection.Metadata.Ecma335;
 
 namespace LocalDB.Displays;
 
@@ -40,30 +40,38 @@ internal static class Display
 
     private static void AddElementDisplay()
     {
-        Console.Clear();
-        Console.Write("Enter an element: ");
+        string userEnter;
 
-        if (PressToExit()) return;
+        while (true)
+        {
+            Console.Clear();
+            Console.Write("('/exit') Enter an element: ");
+            userEnter = Console.ReadLine() ?? String.Empty;
 
-        Operations.AddElement(dataBase: DataBase.dataBase, filePath: DataBase.filePath, element: Console.ReadLine() ?? String.Empty);
+            if (Operations.ExitCheck(userEnter)) return;
+
+            Operations.AddElement(dataBase: DataBase.dataBase, filePath: DataBase.filePath, element: Console.ReadLine() ?? String.Empty);
+        }
     }
 
     private static void RemoveElementDisplay()
     {
         int userIndex = 0;
-        bool isContinue = true;
+        string userEnter;
 
-        while (isContinue)
+        while (true)
         {
             Console.Clear();
             Operations.ListElement(dataBase: DataBase.dataBase);
-            Console.Write("Enter an index to remove by index: ");
+            Console.Write("('/exit') Enter an index to remove:  ");
+            userEnter = Console.ReadLine() ?? String.Empty;
 
-            if (PressToExit()) return;
-
-            if (!Operations.NumberCheck(Console.ReadLine() ?? String.Empty, out userIndex))
+            if(!Operations.ExitCheck(userEnter))
             {
-                if (Error() == true) continue;
+                if (!Operations.NumberCheck(userEnter, out userIndex))
+                {
+                    if (Error()) continue;
+                }
             }
 
             Operations.RemoveElement(dataBase: DataBase.dataBase, filePath: DataBase.filePath, index: userIndex);
@@ -72,10 +80,16 @@ internal static class Display
 
     private static void ListElementDisplay()
     {
-        Console.Clear();
-        Operations.ListElement(dataBase: DataBase.dataBase);
+        string userEnter;
 
-        if (PressToExit()) return;
+        while (true)
+        {
+            Console.Clear();
+            Operations.ListElement(dataBase: DataBase.dataBase);
+            userEnter = Console.ReadLine() ?? String.Empty;
+
+            if (Operations.ExitCheck(userEnter)) return;
+        }
     }
 
     private static bool Error()
@@ -84,12 +98,5 @@ internal static class Display
         Console.WriteLine("Error");
         Thread.Sleep(1000);
         return true;
-    }
-
-    private static bool PressToExit()
-    {
-        ConsoleKeyInfo key = Console.ReadKey();
-        if (key.Key == ConsoleKey.Escape) return true;
-        return false;
     }
 }
