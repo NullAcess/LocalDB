@@ -5,12 +5,6 @@ namespace LocalDB.Operationes;
 
 internal class Operations
 {
-    public static bool NumberCheck(string str, out int number)
-    {
-        if (!int.TryParse(str, out number)) return false;
-        return true;
-    }
-
     public static bool ListElement(List<string> dataBase)
     {
         if (dataBase.Count <= 0) return true;
@@ -40,12 +34,6 @@ internal class Operations
         File.WriteAllLines(filePath, dataBase);
     }
 
-    public static bool ExitCheck(string userEnter)
-    {
-        if (userEnter == "/exit") return true;
-        return false;
-    }
-
     public static bool ReadString(string userEnter)
     {
         if (ExitCheck(userEnter)) return false;
@@ -54,14 +42,33 @@ internal class Operations
 
     public static bool ReadIndex(string userEnter, out int userIndex)
     {
-        userIndex = -1;
-        if (ExitCheck(userEnter)) return false;
-
         if (!NumberCheck(userEnter, out userIndex))
         {
-            if (Display.Error()) return false;
+            Display.Error();
+            return false;
         }
-        else return true;
+
+        else if(NumberCheck(userEnter, out userIndex))
+        {
+            if(userIndex < 0 || userIndex > DataBase.dataBase.Count - 1)
+            {
+                Display.Error();
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    private static bool NumberCheck(string str, out int number)
+    {
+        if (!int.TryParse(str, out number)) return false;
+        return true;
+    }
+
+    private static bool ExitCheck(string userEnter)
+    {
+        if (userEnter == "/exit") return true;
         return false;
     }
 }

@@ -35,7 +35,7 @@ internal static class Display
                 case $"{listElement}": ListElementDisplay(); break;
                 case $"{addElement}": AddElementDisplay(); ; break;
                 case $"{removeElement}": RemoveElementDisplay(); ; break;
-                case $"{changeElement}": ; break;
+                case $"{changeElement}": ChangeElementDisplay(); break;
                 case $"{exit}": Environment.Exit(0); break;
             }
         }
@@ -69,6 +69,7 @@ internal static class Display
             Console.Write("Enter an index to remove:  ");
             userEnter = Console.ReadLine() ?? String.Empty;
 
+            if (!Operations.ReadString(userEnter)) return;
             if (!Operations.ReadIndex(userEnter, out userIndex)) continue;
 
             Operations.RemoveElement(dataBase: DataBase.dataBase, filePath: DataBase.filePath, index: userIndex);
@@ -77,7 +78,26 @@ internal static class Display
 
     private static void ChangeElementDisplay()
     {
+        int userIndex = 0;
+        string userEnter;
 
+        while (true)
+        {
+            Console.Clear();
+            Operations.ListElement(dataBase: DataBase.dataBase);
+            Console.Write("Enter an index to change them:  ");
+            userEnter = Console.ReadLine() ?? String.Empty;
+
+            if (!Operations.ReadString(userEnter)) return;
+            if (!Operations.ReadIndex(userEnter, out userIndex)) continue;
+
+            Console.Write("Enter a new element:  ");
+            userEnter = Console.ReadLine() ?? String.Empty;
+
+            if (!Operations.ReadString(userEnter)) return;
+
+            Operations.ChangeElement(DataBase.dataBase, DataBase.filePath, userIndex, userEnter);
+        }
     }
 
     private static void ListElementDisplay()
