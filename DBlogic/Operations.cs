@@ -1,5 +1,4 @@
 ﻿using LocalDB.DataBases;
-using LocalDB.Displays;
 
 namespace LocalDB.Operationes;
 
@@ -7,13 +6,8 @@ internal class Operations
 {
     public static bool ListElement(List<string> dataBase)
     {
-        if (dataBase.Count <= 0) return true;
-
-        for (int i = 0; i < dataBase.Count; i++)
-        {
-            Console.WriteLine($"{i}.  {dataBase[i]}");
-        }
-        return false;
+        if (dataBase.Count <= 0) return false;
+        return true;
     }
 
     public static void AddElement(List<string> dataBase, string filePath, string element)
@@ -22,15 +16,15 @@ internal class Operations
         File.WriteAllLines(filePath, dataBase);
     }
 
-    public static void RemoveElement(List<string> dataBase, string filePath, int index)
+    public static void RemoveElement(List<string> dataBase, string filePath, int userIndex)
     {
-        dataBase.RemoveAt(index);
+        dataBase.RemoveAt(userIndex);
         File.WriteAllLines(filePath, dataBase);
     }
 
-    public static void ChangeElement(List<string> dataBase, string filePath, int index, string userEnter)
+    public static void ChangeElement(List<string> dataBase, string filePath, int userIndex, string userEnter)
     {
-        dataBase[index] = userEnter;
+        dataBase[userIndex] = userEnter;
         File.WriteAllLines(filePath, dataBase);
     }
 
@@ -42,22 +36,10 @@ internal class Operations
 
     public static bool ReadIndex(string userEnter, out int userIndex)
     {
-        if (!NumberCheck(userEnter, out userIndex))
-        {
-            Display.Error();
-            return false;
-        }
+        if (!NumberCheck(userEnter, out userIndex)) return false;
+        else if (userIndex < 0 || userIndex > DataBase.dataBase.Count - 1) return false;
 
-        else if(NumberCheck(userEnter, out userIndex))
-        {
-            if(userIndex < 0 || userIndex > DataBase.dataBase.Count - 1)
-            {
-                Display.Error();
-                return false;
-            }
-            return true;
-        }
-        return false;
+        return true;
     }
 
     private static bool NumberCheck(string str, out int number)

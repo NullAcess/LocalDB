@@ -1,17 +1,14 @@
 ﻿using LocalDB.DataBases;
 using LocalDB.Operationes;
 using Spectre.Console;
-using System.Reflection.Metadata.Ecma335;
 
 namespace LocalDB.Displays;
 
-internal static class Display
+internal class Display
 {
-    public static void MainMenuDisplay()
+    public void MainMenuDisplay()
     {
-        AnsiConsole.Clear(); // очищаем консоль от прошлого окна, чтоб не было 2 меню на 1 экране.
-
-        bool isContinue = true; // делаем для цикла while
+        Console.Clear(); // очищаем консоль от прошлого окна, чтоб не было 2 меню на 1 экране.
 
         const string listElement = "List of elements";
         const string addElement = "Add Element";
@@ -19,7 +16,7 @@ internal static class Display
         const string changeElement = "Change Element";
         const string exit = "Exit";
 
-        while (isContinue)
+        while (true)
         {
             Console.Clear();
             Console.WriteLine("==== CHOOSE OPTION ====");
@@ -41,7 +38,7 @@ internal static class Display
         }
     }
 
-    private static void AddElementDisplay()
+    private void AddElementDisplay()
     {
         string userEnter;
 
@@ -57,7 +54,7 @@ internal static class Display
         }
     }
 
-    private static void RemoveElementDisplay()
+    private void RemoveElementDisplay()
     {
         int userIndex = 0;
         string userEnter;
@@ -65,18 +62,18 @@ internal static class Display
         while (true)
         {
             Console.Clear();
-            Operations.ListElement(dataBase: DataBase.dataBase);
+            ViewList();
             Console.Write("Enter an index to remove:  ");
             userEnter = Console.ReadLine() ?? String.Empty;
 
-            if (!Operations.ReadString(userEnter)) return;
-            if (!Operations.ReadIndex(userEnter, out userIndex)) continue;
+            if (!Operations.ReadString(userEnter: userEnter)) return;
+            if (!Operations.ReadIndex(userEnter: userEnter, userIndex: out userIndex)) { Error(); continue; }
 
-            Operations.RemoveElement(dataBase: DataBase.dataBase, filePath: DataBase.filePath, index: userIndex);
+            Operations.RemoveElement(dataBase: DataBase.dataBase, filePath: DataBase.filePath, userIndex: userIndex);
         }
     }
 
-    private static void ChangeElementDisplay()
+    private void ChangeElementDisplay()
     {
         int userIndex = 0;
         string userEnter;
@@ -84,23 +81,23 @@ internal static class Display
         while (true)
         {
             Console.Clear();
-            Operations.ListElement(dataBase: DataBase.dataBase);
+            ViewList();
             Console.Write("Enter an index to change them:  ");
             userEnter = Console.ReadLine() ?? String.Empty;
 
             if (!Operations.ReadString(userEnter)) return;
-            if (!Operations.ReadIndex(userEnter, out userIndex)) continue;
+            if (!Operations.ReadIndex(userEnter: userEnter, userIndex: out userIndex)) { Error(); continue; }
 
             Console.Write("Enter a new element:  ");
             userEnter = Console.ReadLine() ?? String.Empty;
 
-            if (!Operations.ReadString(userEnter)) return;
+            if (!Operations.ReadString(userEnter: userEnter)) return;
 
-            Operations.ChangeElement(DataBase.dataBase, DataBase.filePath, userIndex, userEnter);
+            Operations.ChangeElement(dataBase: DataBase.dataBase, filePath: DataBase.filePath, userIndex: userIndex, userEnter: userEnter);
         }
     }
 
-    private static void ListElementDisplay()
+    private void ListElementDisplay()
     {
         string userEnter;
 
@@ -108,21 +105,32 @@ internal static class Display
         {
             Console.Clear();
 
-            if(DataBase.dataBase.Count <= 0) Console.WriteLine("==== EMPTY LIST ====");
-            else Operations.ListElement(dataBase: DataBase.dataBase);
+            ViewList();
 
             Console.Write("Enter: ");
             userEnter = Console.ReadLine() ?? String.Empty;
 
-            if (!Operations.ReadString(userEnter)) return;
+            if (!Operations.ReadString(userEnter: userEnter)) return;
         }
     }
 
-    public static bool Error()
+    private bool Error()
     {
         Console.Clear();
         Console.WriteLine("Error");
         Thread.Sleep(1000);
         return true;
+    }
+
+    private void ViewList()
+    {
+        if (!Operations.ListElement(dataBase: DataBase.dataBase)) Console.WriteLine("==== EMPTY LIST ====");
+        else
+        {
+            for (int i = 0; i < DataBase.dataBase.Count; i++)
+            {
+                Console.WriteLine($"{i}.  {DataBase.dataBase[i]}");
+            }
+        }
     }
 }

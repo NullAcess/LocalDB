@@ -7,20 +7,15 @@ internal class Program
 {
     static void Main()
     {
-        bool isContinue = true;
+        Display display = new Display();
 
-        // ========== READING THE LOCAL DB ==========
-
-        while (isContinue)
+        while (true)
         {
             if (!File.Exists(DataBase.filePath)) File.Create(DataBase.filePath).Close();
 
             DataBase.dataBase = File.ReadAllLines(DataBase.filePath).ToList();
 
-            Display.MainMenuDisplay();
-            isContinue = false;
+            display.MainMenuDisplay();
         }
-
-        Console.ReadKey();
     }
 }
