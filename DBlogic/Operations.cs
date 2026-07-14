@@ -2,7 +2,7 @@
 
 namespace LocalDB.Operationes;
 
-internal class Operations
+internal static class Operations
 {
     public static bool ListElement(List<string> dataBase)
     {

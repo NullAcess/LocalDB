@@ -9,13 +9,9 @@ internal class Program
     {
         Display display = new Display();
 
-        while (true)
-        {
-            if (!File.Exists(DataBase.filePath)) File.Create(DataBase.filePath).Close();
+        if (!File.Exists(DataBase.filePath)) File.Create(DataBase.filePath).Close();
+        DataBase.dataBase = File.ReadAllLines(DataBase.filePath).ToList();
 
-            DataBase.dataBase = File.ReadAllLines(DataBase.filePath).ToList();
-
-            display.MainMenuDisplay();
-        }
+        display.MainMenuDisplay();
     }
 }

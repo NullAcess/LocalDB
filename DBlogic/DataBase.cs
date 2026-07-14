@@ -1,6 +1,6 @@
 ﻿namespace LocalDB.DataBases;
 
-internal class DataBase
+internal static class DataBase
 {
     public static List<string> dataBase = new List<string>();
     public readonly static string docsFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
